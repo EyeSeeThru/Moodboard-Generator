@@ -82,8 +82,9 @@ export function registerRoutes(app: Express) {
   });
 
   // Upload image
-  app.post("/api/upload", upload.single("image"), (req, res) => {
-    if (!req.file) {
+  app.post("/api/upload", upload.single("image"), (req: Express.Request, res) => {
+    const file = (req as any).file;
+    if (!file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
     
@@ -91,7 +92,7 @@ export function registerRoutes(app: Express) {
     // For now, we'll just return a success response
     res.json({ 
       success: true,
-      url: `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
+      url: `data:${file.mimetype};base64,${file.buffer.toString('base64')}`
     });
   });
 }
