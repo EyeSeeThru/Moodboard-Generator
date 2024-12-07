@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Card } from "@/components/ui/card";
+import { searchImages } from "../lib/api";
 import { Button } from "@/components/ui/button";
 import { MoodboardGrid } from "../components/MoodboardGrid";
 import { CustomizationPanel } from "../components/CustomizationPanel";
@@ -52,12 +53,21 @@ export function Home() {
     setImages([...images, newImage]);
   };
 
-  const handleKeywordSearch = (keyword: string) => {
-    // In a real app, this would search an image API
-    toast({
-      title: "Search performed",
-      description: `Searched for: ${keyword}`,
-    });
+  const handleKeywordSearch = async (keyword: string) => {
+    try {
+      const searchResults = await searchImages(keyword);
+      setImages((prevImages) => [...prevImages, ...searchResults]);
+      toast({
+        title: "Images found",
+        description: `Added ${searchResults.length} images to your moodboard`,
+      });
+    } catch (error) {
+      toast({
+        title: "Search failed",
+        description: "Failed to fetch images. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleExport = () => {

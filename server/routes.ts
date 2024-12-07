@@ -3,6 +3,10 @@ import { db } from "../db";
 import { moodboards } from "@db/schema";
 import multer from "multer";
 import { eq } from "drizzle-orm";
+import fetch from "node-fetch";
+
+const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+const UNSPLASH_API_URL = "https://api.unsplash.com";
 
 const upload = multer({ 
   limits: {
@@ -94,5 +98,40 @@ export function registerRoutes(app: Express) {
       success: true,
       url: `data:${file.mimetype};base64,${file.buffer.toString('base64')}`
     });
+  });
+
+  // Search images from Unsplash
+  app.get("/api/search-images", async (req, res) => {
+    const { query } = req.query;
+    
+    if (!query) {
+      return res.status(400).json({ error: "Query parameter is required" });
+    }
+
+    try {
+      const response = await fetch(
+        `${UNSPLASH_API_URL}/search/photos?query=${encodeURIComponent(query)}&per_page=8`,
+        {
+          headers: {
+            Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch from Unsplash');
+      }
+
+      const data = await response.json();
+      const images = data.results.map((img: any) => ({
+        id: img.id,
+        url: img.urls.regular,
+        alt: img.alt_description || img.description || 'Unsplash image',
+      }));
+
+      res.json(images);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch images from Unsplash" });
+    }
   });
 }

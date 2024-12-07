@@ -39,3 +39,9 @@ export async function updateMoodboard(id: number, data: any) {
   if (!response.ok) throw new Error("Failed to update moodboard");
   return response.json();
 }
+
+export async function searchImages(query: string) {
+  const response = await fetch(`${API_BASE}/search-images?query=${encodeURIComponent(query)}`);
+  if (!response.ok) throw new Error("Failed to search images");
+  return response.json();
+}
