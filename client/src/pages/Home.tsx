@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { searchImages } from "../lib/api";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { MoodboardGrid } from "../components/MoodboardGrid";
 import { CustomizationPanel } from "../components/CustomizationPanel";
 import { ImageUploader } from "../components/ImageUploader";
@@ -81,11 +82,14 @@ export function Home() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        <header className="space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight">Moodboard Generator</h1>
-          <p className="text-muted-foreground">
-            Create beautiful moodboards with ease
-          </p>
+        <header className="flex justify-between items-start">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold tracking-tight">Moodboard Generator</h1>
+            <p className="text-muted-foreground">
+              Create beautiful moodboards with ease
+            </p>
+          </div>
+          <ThemeToggle />
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">

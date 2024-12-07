@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Home } from "./pages/Home";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { ThemeProvider } from "@/components/theme-provider";
 
 function Router() {
   return (
@@ -21,10 +22,12 @@ function Router() {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <DndProvider backend={HTML5Backend}>
-        <Router />
-        <Toaster />
-      </DndProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <DndProvider backend={HTML5Backend}>
+          <Router />
+          <Toaster />
+        </DndProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,
 );
