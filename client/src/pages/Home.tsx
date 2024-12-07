@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MoodboardGrid } from "../components/MoodboardGrid";
@@ -32,6 +32,17 @@ const EXAMPLE_IMAGES = [
 
 export function Home() {
   const [images, setImages] = useState(EXAMPLE_IMAGES);
+  
+  const handleImageReorder = useCallback((dragIndex: number, hoverIndex: number) => {
+    setImages((prevImages) => {
+      const newImages = [...prevImages];
+      [newImages[dragIndex], newImages[hoverIndex]] = [
+        newImages[hoverIndex],
+        newImages[dragIndex],
+      ];
+      return newImages;
+    });
+  }, []);
   const [layout, setLayout] = useState("grid");
   const [spacing, setSpacing] = useState(2);
   const [filter, setFilter] = useState("none");
@@ -82,6 +93,7 @@ export function Home() {
               layout={layout}
               spacing={spacing}
               filter={filter}
+              onImageReorder={handleImageReorder}
             />
           </div>
 
