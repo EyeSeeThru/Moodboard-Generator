@@ -1,0 +1,1 @@
+Generates mood boards based on similar images. This is just a draft shell for now to implement a basic UI with drag and drop image cards, as well as an integration with Unsplash to pull in images to add to those uploaded by the user.  The app will eventually allow bulk uploads and options to filter by tags and keywords from descriptions and metada.
